@@ -42,7 +42,7 @@ const queryFilter = (rawQuery) => {
   return query;
 };
 
-export const commandWallhaven = (msg) => {
+export const wallhaven = (msg) => {
   let query = msg.text.split(" ").slice(1);
   if (query[0] === "-h") {
     let messages = `
@@ -65,6 +65,7 @@ export const commandWallhaven = (msg) => {
   } else {
     let payload = queryFilter(query);
     let isPageFound = query.find((e) => e.includes("page"));
+
     var newQuery = query.filter((e) => !e.includes("page"));
     let each = isPageFound && isPageFound.split(":");
 
@@ -72,11 +73,11 @@ export const commandWallhaven = (msg) => {
       const keyboard = Keyboard.make([
         Key.callback(
           "Back",
-          `/wall page:${Number(each[1]) - 1} ${newQuery.join(" ")}`
+          `/wallhaven page:${Number(each[1]) - 1} ${newQuery.join(" ")}`
         ),
         Key.callback(
           "Next",
-          `/wall page:${Number(each[1]) + 1} ${newQuery.join(" ")}`
+          `/wallhaven page:${Number(each[1]) + 1} ${newQuery.join(" ")}`
         ),
       ]).inline();
       bot.sendMessage(
@@ -86,7 +87,7 @@ export const commandWallhaven = (msg) => {
       );
     } else {
       const keyboard = Keyboard.make([
-        Key.callback("Next", `/wall page:2 ${newQuery.join(" ")}`),
+        Key.callback("Next", `/wallhaven page:2 ${newQuery.join(" ")}`),
       ]).inline();
       bot.sendMessage(
         msg.chat.id,
@@ -94,13 +95,11 @@ export const commandWallhaven = (msg) => {
         keyboard
       );
     }
+
     axios
       .get(`https://wallhaven.cc/api/v1/search?${qs.stringify(payload)}`)
       .then((f) => {
-        // bot.sendPhoto(msg.chat.id, f.data.data[0].path);
-        f.data.data.forEach((e) => {
-          bot.sendPhoto(msg.chat.id, e.path);
-        });
+        f.data.data.forEach((e) => bot.sendPhoto(msg.chat.id, e.path));
       });
   }
 };

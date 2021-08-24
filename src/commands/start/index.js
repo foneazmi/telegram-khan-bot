@@ -1,7 +1,9 @@
 import { bot } from "../../app";
 
-export const commandStart = (e) => {
+export const start = (e) => {
   let messages = `List Command 
-  /wall -h`;
+  /wallhaven -h
+  /chatId
+  `;
   bot.sendMessage(e.chat.id, messages);
 };

@@ -40,3 +40,16 @@ app.post("/" + bot.token, (req, res) => {
   bot.processUpdate(req.body);
   res.sendStatus(200);
 });
+
+app.post("/webhook", (req, res) => {
+  // let groupId = -539353339;
+  let message = "webhook\n";
+  if (req.body.status === "success") {
+    // console.log(body);
+  } else {
+    // message += `${}`;
+  }
+  bot.sendMessage(req.query.chatId, message);
+  bot.sendMessage(req.query.chatId, JSON.stringify(req.body));
+  res.sendStatus(200);
+});

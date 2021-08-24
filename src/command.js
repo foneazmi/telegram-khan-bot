@@ -1,18 +1,10 @@
 import { getFirstWord } from "./helpers";
-import {
-  commandStart,
-  commandWallhaven,
-  commandYoutube,
-  commandYts,
-  commandKhan,
-} from "./commands";
+import { start, wallhaven, chatId } from "./commands";
 
 const commandList = {
-  "/start": commandStart,
-  "/wall": commandWallhaven,
-  "/yt": commandYoutube,
-  "/yts": commandYts,
-  "/khan": commandKhan,
+  "/chatId": chatId,
+  "/start": start,
+  "/wallhaven": wallhaven,
 };
 
 export const command = (msg) => {
