@@ -42,14 +42,11 @@ app.post("/" + bot.token, (req, res) => {
 });
 
 app.post("/webhook", (req, res) => {
-  // let groupId = -539353339;
-  let message = "webhook\n";
-  if (req.body.status === "success") {
-    // console.log(body);
-  } else {
-    // message += `${}`;
-  }
-  bot.sendMessage(req.query.chatId, message);
-  bot.sendMessage(req.query.chatId, JSON.stringify(req.body));
+  let { query, body } = req;
+  let message = `webhook from ${query.clientName}\n==========\n`;
+  Object.keys(body).map((e) => {
+    message += `${e} : ${body[e]}\n`;
+  });
+  bot.sendMessage(query.chatId, message);
   res.sendStatus(200);
 });
