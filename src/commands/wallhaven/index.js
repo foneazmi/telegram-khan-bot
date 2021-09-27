@@ -99,7 +99,12 @@ export const wallhaven = (msg) => {
     axios
       .get(`https://wallhaven.cc/api/v1/search?${qs.stringify(payload)}`)
       .then((f) => {
-        f.data.data.forEach((e) => bot.sendPhoto(msg.chat.id, e.path));
+        f.data.data.forEach((e) => {
+          console.log(e);
+          bot.sendPhoto(msg.chat.id, e.path, {
+            caption: `${e.resolution} - ${e.purity}`,
+          });
+        });
       });
   }
 };
