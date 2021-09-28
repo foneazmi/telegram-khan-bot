@@ -60,15 +60,14 @@ export const wallhaven = async (msg) => {
     `https://wallhaven.cc/api/v1/search?${qs.stringify(payload)}`
   );
 
-  data.data.data.map((e) => {
+  data.data.data.map((e, index) => {
+    let page = each && Number(each[1]) ? Number(each[1]) : 1;
     bot.sendPhoto(msg.chat.id, e.path, {
       reply_markup: {
         resize_keyboard: true,
         keyboard: [pagination, ["/home"]],
       },
-      caption: `${e.resolution} - ${e.purity} - page ${
-        each && Number(each[1]) ? Number(each[1]) : 1
-      }`,
+      caption: `number ${index} / page ${page}`,
     });
   });
 };
