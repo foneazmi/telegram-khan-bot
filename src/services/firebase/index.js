@@ -1,20 +1,20 @@
 import admin from "firebase-admin";
 import serviceAccount from "../../../khan-53dce-firebase-adminsdk-rk0ul-3518274405.json";
-
 export const firebaseApp = admin.initializeApp({
   credential: admin.credential.cert(serviceAccount),
   databaseURL: "https://khan-53dce-default-rtdb.firebaseio.com",
 });
 
 export const setLogState = async (msg) => {
+  const token = process.env.TELEGRAM_TOKEN;
+  let identifier = token.substr(0, 5);
   const ref = firebaseApp
     .firestore()
-    .collection(`chat-id`)
+    .collection(`chat-id-${identifier}`)
     .doc(`${msg.chat.id}`);
   let data = {};
   if (msg.text === "Next" || msg.text === "Back") {
     let log = await getLogState(msg.chat.id);
-    console.log("log firebase", log.data());
     let page =
       msg.text === "Next"
         ? Number(log.data().page) + 1
@@ -23,8 +23,7 @@ export const setLogState = async (msg) => {
       text: msg.text,
       page: page > 0 ? page : 1,
     };
-    console.log(data, page);
-    ref.update(data);
+    ref.set(data);
   } else {
     let query = msg.text.split(" ");
     let isCommand = query[0].includes("/");
@@ -41,14 +40,16 @@ export const setLogState = async (msg) => {
       : {
           text: msg.text,
         };
-    ref.update(data);
+    ref.set(data);
   }
 };
 
 export const getLogState = async (id) => {
+  const token = process.env.TELEGRAM_TOKEN;
+  let identifier = token.substr(0, 5);
   let log = await firebaseApp
     .firestore()
-    .collection(`chat-id`)
+    .collection(`chat-id-${identifier}`)
     .doc(`${id}`)
     .get();
   return log;

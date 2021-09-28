@@ -20,7 +20,6 @@ export const command = async (msg) => {
     let payload = `${command} page:${page > 0 ? page : 1} ${
       log.data().payload
     }`;
-    console.log("command", payload);
     msg.text = payload;
   }
 
