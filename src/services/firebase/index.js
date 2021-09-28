@@ -23,7 +23,7 @@ export const setLogState = async (msg) => {
       text: msg.text,
       page: page > 0 ? page : 1,
     };
-    console.log(data);
+    console.log(data, page);
     ref.update(data);
   } else {
     let query = msg.text.split(" ");

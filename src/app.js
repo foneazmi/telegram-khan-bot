@@ -23,11 +23,11 @@ bot.on("callback_query", (msg) => {
 });
 
 bot.on("polling_error", (error) => {
-  console.log(error);
+  // console.log(error);
 });
 
 bot.on("webhook_error", (error) => {
-  console.log(error.code);
+  // console.log(error.code);
 });
 
 const app = express();
