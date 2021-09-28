@@ -14,7 +14,11 @@ export const youtube = (msg) => {
 
     // Listening for the 'finish' event
     writeableStream.on("finish", () => {
-      bot.sendVideo(msg.chat.id, `src/commands/youtube/${title}.mp4`, keys);
+      bot.sendVideo(msg.chat.id, `src/commands/youtube/${title}.mp4`, {
+        reply_markup: {
+          keyboard: [["/home"]],
+        },
+      });
     });
 
     // Plug it into the ReadableStream
