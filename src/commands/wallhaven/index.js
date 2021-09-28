@@ -7,23 +7,23 @@ const queryFilter = (rawQuery) => {
     let each = e.split(":");
     if (each[0] === "q") {
       query = { ...query, q: each[1] };
-    } else if (each[0] === "categories") {
+    } else if (each[0] === "cat") {
       query = { ...query, categories: each[1] };
-    } else if (each[0] === "purity") {
+    } else if (each[0] === "pur") {
       query = { ...query, purity: each[1] };
-    } else if (each[0] === "sorting") {
+    } else if (each[0] === "sort") {
       query = { ...query, sorting: each[1] };
-    } else if (each[0] === "order") {
+    } else if (each[0] === "ord") {
       query = { ...query, order: each[1] };
-    } else if (each[0] === "topRange") {
+    } else if (each[0] === "tr") {
       query = { ...query, topRange: each[1] };
-    } else if (each[0] === "atleast") {
+    } else if (each[0] === "al") {
       query = { ...query, atleast: each[1] };
-    } else if (each[0] === "resolutions") {
+    } else if (each[0] === "res") {
       query = { ...query, resolutions: each[1] };
-    } else if (each[0] === "ratios") {
+    } else if (each[0] === "rat") {
       query = { ...query, ratios: each[1] };
-    } else if (each[0] === "colors") {
+    } else if (each[0] === "col") {
       query = { ...query, colors: each[1] };
     } else if (each[0] === "page") {
       query = { ...query, page: each[1] };
@@ -48,13 +48,9 @@ export const wallhaven = async (msg) => {
   var newQuery = query.filter((e) => !e.includes("page"));
   let each = isPageFound && isPageFound.split(":");
 
-  let pagination =
-    each && Number(each[1]) > 1
-      ? [
-          `/wall page:${Number(each[1]) - 1} ${newQuery.join(" ")}`,
-          `/wall page:${Number(each[1]) + 1} ${newQuery.join(" ")}`,
-        ]
-      : [`/wall page:2 ${newQuery.join(" ")}`];
+  let pagination = [
+    `/wall page:${each ? Number(each[1]) + 1 : 2} ${newQuery.join(" ")}`,
+  ];
 
   let data = await axios.get(
     `https://wallhaven.cc/api/v1/search?${qs.stringify(payload)}`
@@ -67,7 +63,7 @@ export const wallhaven = async (msg) => {
         resize_keyboard: true,
         keyboard: [pagination, ["/home"]],
       },
-      caption: `number ${index} / page ${page}`,
+      caption: `page ${index}/${page}`,
     });
   });
 };
