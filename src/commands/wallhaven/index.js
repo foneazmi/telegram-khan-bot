@@ -42,7 +42,7 @@ const queryFilter = (rawQuery) => {
   return query;
 };
 
-export const wallhaven = (msg) => {
+export const wallhaven = async (msg) => {
   let query = msg.text.split(" ").slice(1);
   if (query[0] === "-h") {
     let messages = `
@@ -69,42 +69,24 @@ export const wallhaven = (msg) => {
     var newQuery = query.filter((e) => !e.includes("page"));
     let each = isPageFound && isPageFound.split(":");
 
+    let keys = Keyboard.reply([
+      Key.callback(`/wall page:2 ${newQuery.join(" ")}`),
+    ]);
     if (each && each[1] > 1) {
-      const keyboard = Keyboard.make([
-        Key.callback(
-          "Back",
-          `/wallhaven page:${Number(each[1]) - 1} ${newQuery.join(" ")}`
-        ),
-        Key.callback(
-          "Next",
-          `/wallhaven page:${Number(each[1]) + 1} ${newQuery.join(" ")}`
-        ),
-      ]).inline();
-      bot.sendMessage(
-        msg.chat.id,
-        `Wallhaven page:${each[1]} ${newQuery.join(" ")}`,
-        keyboard
-      );
-    } else {
-      const keyboard = Keyboard.make([
-        Key.callback("Next", `/wallhaven page:2 ${newQuery.join(" ")}`),
-      ]).inline();
-      bot.sendMessage(
-        msg.chat.id,
-        `Wallhaven page:1 ${newQuery.join(" ")}`,
-        keyboard
-      );
+      keys = Keyboard.reply([
+        Key.callback(`/wall page:${Number(each[1]) - 1} ${newQuery.join(" ")}`),
+        Key.callback(`/wall page:${Number(each[1]) + 1} ${newQuery.join(" ")}`),
+      ]);
     }
 
-    axios
-      .get(`https://wallhaven.cc/api/v1/search?${qs.stringify(payload)}`)
-      .then((f) => {
-        f.data.data.forEach((e) => {
-          console.log(e);
-          bot.sendPhoto(msg.chat.id, e.path, {
-            caption: `${e.resolution} - ${e.purity}`,
-          });
-        });
+    let data = await axios.get(
+      `https://wallhaven.cc/api/v1/search?${qs.stringify(payload)}`
+    );
+    data.data.data.map((e) => {
+      bot.sendPhoto(msg.chat.id, e.path, {
+        caption: `${e.resolution} - ${e.purity}`,
+        ...keys,
       });
+    });
   }
 };

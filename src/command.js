@@ -2,7 +2,7 @@ import { getFirstWord } from "./helpers";
 import { start, wallhaven, chatId, youtube } from "./commands";
 
 const commandList = {
-  "/chatId": chatId,
+  "/id": chatId,
   "/start": start,
   "/wallhaven": wallhaven,
   "/wall": wallhaven,
