@@ -44,9 +44,15 @@ export const wallhaven = async (msg) => {
   let query = msg.text.split(" ").slice(1);
   let payload = queryFilter(query);
   let isPageFound = query.find((e) => e.includes("page"));
+  let newQuery = query.filter((e) => !e.includes("page"));
   let page = isPageFound && isPageFound.split(":");
   let pagination =
-    isPageFound && Number(page[1]) > 1 ? [`Back`, `Next`] : [`Next`];
+    isPageFound && Number(page[1]) > 1
+      ? [
+          `/wall page:${Number(page[1]) - 1} ${newQuery.join(" ")}`,
+          `/wall page:${Number(page[1]) + 1} ${newQuery.join(" ")}`,
+        ]
+      : [`/wall page:${Number(page[1]) - 1} ${newQuery.join(" ")}`];
 
   let data = await axios.get(
     `https://wallhaven.cc/api/v1/search?${qs.stringify(payload)}`
