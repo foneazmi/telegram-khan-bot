@@ -6,11 +6,11 @@ export const firebaseApp = admin.initializeApp({
 });
 
 export const setLogState = async (msg) => {
-  const token = process.env.TELEGRAM_TOKEN;
-  let identifier = token.substr(0, 5);
+  // const token = process.env.TELEGRAM_TOKEN;
+  // let identifier = token.substr(0, 5);
   const ref = firebaseApp
     .firestore()
-    .collection(`chat-id-${identifier}`)
+    .collection(`chat-id`)
     .doc(`${msg.chat.id}`);
   let data = {};
   if (msg.text === "Next" || msg.text === "Back") {
@@ -45,11 +45,11 @@ export const setLogState = async (msg) => {
 };
 
 export const getLogState = async (id) => {
-  const token = process.env.TELEGRAM_TOKEN;
-  let identifier = token.substr(0, 5);
+  // const token = process.env.TELEGRAM_TOKEN;
+  // let identifier = token.substr(0, 5);
   let log = await firebaseApp
     .firestore()
-    .collection(`chat-id-${identifier}`)
+    .collection(`chat-id`)
     .doc(`${id}`)
     .get();
   return log;
