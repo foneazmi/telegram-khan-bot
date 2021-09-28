@@ -66,9 +66,9 @@ export const wallhaven = async (msg) => {
         resize_keyboard: true,
         keyboard: [pagination, ["/home"]],
       },
-      caption: `${e.resolution} - ${e.purity}`,
+      caption: `${e.resolution} - ${e.purity} - page ${
+        each && Number(each[1]) ? Number(each[1]) : 1
+      }`,
     });
   });
 };
-
-export const callbackWallhaven = async (msg) => {};
