@@ -55,14 +55,17 @@ export const wallhaven = async (msg) => {
   let data = await axios.get(
     `https://wallhaven.cc/api/v1/search?${qs.stringify(payload)}`
   );
+  let page = each && Number(each[1]) ? Number(each[1]) : 1;
+
+  bot.sendMessage(msg.chat.id, `Wallhaven page ${page}`, {
+    reply_markup: {
+      resize_keyboard: true,
+      keyboard: [pagination, ["/home"]],
+    },
+  });
 
   data.data.data.map((e, index) => {
-    let page = each && Number(each[1]) ? Number(each[1]) : 1;
     bot.sendPhoto(msg.chat.id, e.path, {
-      reply_markup: {
-        resize_keyboard: true,
-        keyboard: [pagination, ["/home"]],
-      },
       caption: `page ${index}/${page}`,
     });
   });
