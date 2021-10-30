@@ -44,10 +44,16 @@ app.post("/" + bot.token, (req, res) => {
 app.post("/webhook", (req, res) => {
   let { query, body } = req;
   let message = `webhook from ${query.clientName}\n==========\n`;
-  console.log("body", body);
   Object.keys(body).map((e) => {
     message += `${e} : ${body[e]}\n`;
   });
+  bot.sendMessage(query.chatId, message);
+  res.sendStatus(200);
+});
+
+app.post("/log", (req, res) => {
+  let { query, body } = req;
+  let message = `${query.clientName}\n==========\n${body}`;
   bot.sendMessage(query.chatId, message);
   res.sendStatus(200);
 });
