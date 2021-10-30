@@ -44,6 +44,7 @@ app.post("/" + bot.token, (req, res) => {
 app.post("/webhook", (req, res) => {
   let { query, body } = req;
   let message = `webhook from ${query.clientName}\n==========\n`;
+  console.log("body", body);
   Object.keys(body).map((e) => {
     message += `${e} : ${body[e]}\n`;
   });

@@ -1,1 +1,2 @@
-export * from "./firebase/index.js";
+export * from "./firebase";
+export * from "./api";

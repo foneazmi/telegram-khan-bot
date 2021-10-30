@@ -1,5 +1,5 @@
 import { getFirstWord } from "./helpers";
-import { start, wallhaven, chatId, youtube, firebase } from "./commands";
+import { start, wallhaven, chatId, youtube, firebase, stock } from "./commands";
 // import { getLogState, setLogState } from "./services";
 const commandList = {
   "/start": start,
@@ -8,6 +8,7 @@ const commandList = {
   "/id": chatId,
   "/yt": youtube,
   "/fb": firebase,
+  $: stock,
 };
 
 export const command = async (msg) => {
