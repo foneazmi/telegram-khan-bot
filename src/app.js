@@ -55,7 +55,7 @@ app.post("/log", (req, res) => {
   let { query, body } = req;
   let message = `LOG from ${query.clientName}`;
   body.map((e, index) => {
-    rawMessage = `\n${index + 1}. ${JSON.stringify(e)}`
+    let rawMessage = `\n${index + 1}. ${JSON.stringify(e)}`
       .replace("http://", "")
       .replace("https://", "");
     message += rawMessage;
