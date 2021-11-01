@@ -55,7 +55,10 @@ app.post("/log", (req, res) => {
   let { query, body } = req;
   let message = `LOG from ${query.clientName}`;
   body.map((e, index) => {
-    message += `\n${index + 1}. ${JSON.stringify(e)}`;
+    rawMessage = `\n${index + 1}. ${JSON.stringify(e)}`
+      .replace("http://", "")
+      .replace("https://", "");
+    message += rawMessage;
   });
   bot.sendMessage(query.chatId, message);
   res.sendStatus(200);
