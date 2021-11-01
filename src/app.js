@@ -43,9 +43,9 @@ app.post("/" + bot.token, (req, res) => {
 
 app.post("/webhook", (req, res) => {
   let { query, body } = req;
-  let message = `webhook from ${query.clientName}\n==========\n`;
+  let message = `webhook from ${query.clientName}`;
   Object.keys(body).map((e) => {
-    message += `${e} : ${body[e]}\n`;
+    message += `\n${e} : ${JSON.stringify(body[e])}`;
   });
   bot.sendMessage(query.chatId, message);
   res.sendStatus(200);
