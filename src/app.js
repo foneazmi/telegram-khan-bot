@@ -53,7 +53,7 @@ app.post("/webhook", (req, res) => {
 
 app.post("/log", (req, res) => {
   let { query, body } = req;
-  let message = `${query.clientName}\n}`;
+  let message = `${query.clientName}`;
   body.map((e, index) => {
     message += `\n${index + 1}. ${JSON.stringify(e)}`;
   });
