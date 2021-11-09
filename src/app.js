@@ -53,10 +53,9 @@ app.post("/webhook", (req, res) => {
 
 app.post("/log", (req, res) => {
   let { query, body } = req;
-  let message = `LOG from ${query.clientName}`;
-  body.map((e, index) => {
-    message += `\n${index + 1}. ${JSON.stringify(e)}`;
-  });
-  bot.sendMessage(query.chatId, message);
+  bot.sendMessage(query.chatId, `log ${query.clientName}`);
+  body.isArray
+    ? body.map((e) => bot.sendMessage(query.chatId, `${JSON.stringify(e)}`))
+    : bot.sendMessage(query.chatId, `${JSON.stringify(body)}`);
   res.sendStatus(200);
 });
