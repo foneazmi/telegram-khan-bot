@@ -53,11 +53,6 @@ app.post("/webhook", (req, res) => {
 
 app.post("/log", (req, res) => {
   let { query, body } = req;
-  bot.sendMessage(query.chatId, `log ${query.clientName}`);
-  try {
-    body.map((e) => bot.sendMessage(query.chatId, `${JSON.stringify(e)}`))
-  } catch (error) {
-    bot.sendMessage(query.chatId, `${JSON.stringify(body)}`);
-  }
+  bot.sendMessage(query.chatId, `log ${query?.clientName}\n${JSON.stringify(body)}`);
   res.sendStatus(200);
 });
