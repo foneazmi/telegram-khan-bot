@@ -1,5 +1,6 @@
 import admin from "firebase-admin";
 import serviceAccount from "../../../khan-53dce-firebase-adminsdk-rk0ul-3518274405.json";
+
 export const firebaseApp = admin.initializeApp({
   credential: admin.credential.cert(serviceAccount),
   databaseURL: "https://khan-53dce-default-rtdb.firebaseio.com",
@@ -53,6 +54,18 @@ export const getLogState = async (id) => {
     .doc(`${id}`)
     .get();
   return log;
+};
+
+export const fcm = async () => {
+  firebaseApp
+    .messaging()
+    .sendToDeviceGroup()
+    .then((response) => {
+      res.status(200).send("Notification sent successfully");
+    })
+    .catch((error) => {
+      console.log(error);
+    });
 };
 
 // const mapArrayToObject = (array) => {
