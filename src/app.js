@@ -53,10 +53,14 @@ app.post("/webhook", (req, res) => {
 
 app.post("/log", (req, res) => {
   let { query, body } = req;
-  let message = JSON.stringify(body);
-  message = message.replace(/\"/g, `"`);
-  console.log(`body ${message}`);
-
-  bot.sendMessage(query.chatId, `${message}`);
+  console.log(JSON.stringify(body));
+  if (body instanceof Array) {
+    body.map((element) => {
+      bot.sendMessage(query.chatId, `${element}`);
+    });
+  } else {
+    let message = JSON.stringify(body);
+    bot.sendMessage(query.chatId, `${message}`);
+  }
   res.sendStatus(200);
 });
