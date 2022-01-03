@@ -57,11 +57,14 @@ app.post("/log", (req, res) => {
   let { query, body } = req;
   if (body instanceof Array) {
     body.map((element) => {
-      bot.sendMessage(query.chatId, `${element}`);
+      if (typeof element === "object") {
+        bot.sendMessage(query.chatId, `${JSON.stringify(element)}`);
+      } else {
+        bot.sendMessage(query.chatId, `${element}`);
+      }
     });
   } else {
-    let message = JSON.stringify(body);
-    bot.sendMessage(query.chatId, `${message}`);
+    bot.sendMessage(query.chatId, `${JSON.stringify(body)}`);
   }
   res.sendStatus(200);
 });
