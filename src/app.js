@@ -53,7 +53,6 @@ app.post("/webhook", (req, res) => {
 
 app.post("/log", (req, res) => {
   let { query, body } = req;
-  console.log(JSON.stringify(body));
   if (body instanceof Array) {
     body.map((element) => {
       bot.sendMessage(query.chatId, `${element}`);
@@ -62,5 +61,16 @@ app.post("/log", (req, res) => {
     let message = JSON.stringify(body);
     bot.sendMessage(query.chatId, `${message}`);
   }
+  res.sendStatus(200);
+});
+
+app.post("/fcm", ({ body }, res) => {
+  fcm(body)
+    .then((response) => {
+      console.log("response", response);
+    })
+    .catch((error) => {
+      console.log("error", error);
+    });
   res.sendStatus(200);
 });
