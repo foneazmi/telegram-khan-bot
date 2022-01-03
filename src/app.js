@@ -2,6 +2,8 @@ import TelegramBot from "node-telegram-bot-api";
 import express from "express";
 import { command } from "./command";
 import dotenv from "dotenv";
+import { fcm } from "./services/firebase";
+
 dotenv.config();
 
 const token = process.env.TELEGRAM_TOKEN;
