@@ -66,30 +66,33 @@ const chaptersList = async (url) => {
 };
 
 const latest = async (page) => {
-  let m_list = [];
+  const m_list = [];
+  console.log('start scraping')
   try {
-    res = await axios.get(`https://hiperdex.com/page/${page}`);
+    const res = await axios.get(`https://hiperdex.com/page/${page}`);
+    console.log('start await')
     const body = await res.data;
     const $ = cheerio.load(body);
-    let p_title = $(".c-blog__heading h1").text().trim();
+    const p_title = $(".c-blog__heading h1").text().trim();
+    console.log('start scraping 1')
     $("#loop-content .page-listing-item .page-item-detail").each(
       (_, element) => {
-        $elements = $(element);
-        url = $elements.find("a").attr("href");
-        image = $elements.find("img").attr("src");
-        title = $elements
+        const el = $(element);
+        const url =el.find("a").attr("href");
+        const image = el.find("img").attr("src");
+        const title = el
           .find(".page-item-detail .post-title")
           .find("h3")
           .text()
           .trim();
-        rating = $elements.find(".total_votes").text().trim();
-        chapter = $elements.find(".list-chapter .chapter-item");
-        let chapters = [];
+        const rating = el.find(".total_votes").text().trim();
+        const chapter = el.find(".list-chapter .chapter-item");
+        const chapters = [];
         $(chapter).each((i, e) => {
-          let c_title = $(e).find("a").text().trim();
-          let c_url = $(e).find("a").attr("href");
-          let c_date = $(e).find(".post-on").text().trim();
-          let status = $(e).find(".post-on a").attr("title");
+          const c_title = $(e).find("a").text().trim();
+          const c_url = $(e).find("a").attr("href");
+          const c_date = $(e).find(".post-on").text().trim();
+          const status = $(e).find(".post-on a").attr("title");
           chapters.push({
             c_title: c_title,
             c_url: c_url,
@@ -119,22 +122,21 @@ const latest = async (page) => {
       last_page: parseInt(last_page.replace(/[^0-9]/g, "")),
     };
   } catch (error) {
+    console.log(error)
     return { error: "Sorry dude, an error occurred! No Latest!" };
   }
 };
 
 const chapter = async (manga, chapter) => {
-  let ch_list = [];
-
   try {
-    res = await axios.get(`https://hiperdex.com/manga/${manga}/${chapter}`);
+    let ch_list = [];
+    const res = await axios.get(`https://hiperdex.com/manga/${manga}/${chapter}`);
     const body = await res.data;
     const $ = cheerio.load(body);
 
     $(".read-container img").each((index, element) => {
-      $elements = $(element);
-      image = $elements.attr("src").trim();
-
+      const elements = $(element);
+      const image = elements.attr("src").trim();
       ch_list.push({ ch: image });
     });
 
@@ -161,6 +163,7 @@ const chapter = async (manga, chapter) => {
       ],
     };
   } catch (error) {
+    console.log(error)
     return { error: "Sorry dude, an error occurred! No Chapter Images!" };
   }
 };

@@ -3,10 +3,9 @@ import {
   start,
   wallhaven,
   chatId,
-  youtube,
   firebase,
   stock,
-  hiperdex,
+  hiperdex,hiperdexCallback,
 } from "./commands";
 // import { getLogState, setLogState } from "./services";
 const commandList = {
@@ -14,25 +13,21 @@ const commandList = {
   "/home": start,
   "/wall": wallhaven,
   "/id": chatId,
-  "/yt": youtube,
   "/fb": firebase,
   "/hd": hiperdex,
   $: stock,
 };
 
-export const command = async (msg) => {
-  // setLogState(msg);
-  // let log = await getLogState(msg.chat.id);
-  // if (getFirstWord(msg.text) === "Next" || getFirstWord(msg.text) === "Back") {
-  //   let isNext = getFirstWord(msg.text) === "Next";
-  //   let page = isNext ? log.data().page + 1 : log.data().page - 1;
-  //   let command = log.data().command;
-  //   let payload = `${command} page:${page > 0 ? page : 1} ${
-  //     log.data().payload
-  //   }`;
-  //   msg.text = payload;
-  // }
+export const command = (msg) => {
+  const run = commandList[getFirstWord(msg.text)] || (()=>{});
+  run(msg);
+};
 
-  const commandRun = commandList[getFirstWord(msg.text)];
-  commandRun && commandRun(msg);
+const callbackList = {
+  "hd": hiperdexCallback,
+};
+
+export const callback = (msg) => {
+  const run = callbackList[getFirstWord(msg.text)] || (()=>{});
+  run(msg);
 };
