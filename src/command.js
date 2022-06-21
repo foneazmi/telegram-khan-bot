@@ -1,5 +1,13 @@
 import { getFirstWord } from "./helpers";
-import { start, wallhaven, chatId, youtube, firebase, stock } from "./commands";
+import {
+  start,
+  wallhaven,
+  chatId,
+  youtube,
+  firebase,
+  stock,
+  hiperdex,
+} from "./commands";
 // import { getLogState, setLogState } from "./services";
 const commandList = {
   "/start": start,
@@ -8,6 +16,7 @@ const commandList = {
   "/id": chatId,
   "/yt": youtube,
   "/fb": firebase,
+  "/hd": hiperdex,
   $: stock,
 };
 

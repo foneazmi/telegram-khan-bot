@@ -3,6 +3,7 @@
     "apikey",
     "atleast",
     "Firestore",
+    "hiperdex",
     "toplist",
     "youtubedl",
     "ytdl"

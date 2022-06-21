@@ -5,3 +5,4 @@ export * from "./youtube";
 export * from "./firebase";
 
 export * from "./stock";
+export * from "./hiperdex";
