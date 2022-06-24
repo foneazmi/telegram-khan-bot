@@ -63,10 +63,21 @@ export const wallhaven = async (msg) => {
       keyboard: [pagination, ["/home"]],
     },
   });
-
-  data.data.data.map((e, index) => {
-    bot.sendPhoto(msg.chat.id, e.path, {
-      caption: `page ${index}/${page}`,
-    });
+  sendImageInQueue({
+    id: msg.chat.id,
+    data: data.data.data,
+    length: data.data.data.length,
+    page: 0,
   });
+};
+
+const sendImageInQueue = async ({ id, data, length, page }) => {
+  if (page > length) {
+    return 0;
+  } else {
+    await bot.sendPhoto(id, data[page].ch, {
+      caption: `page ${page + 1}`,
+    });
+    return sendImageInQueue({ id, data, length, page: ++page });
+  }
 };
