@@ -23,6 +23,6 @@ export const firebase = (msg) => {
       bot.sendMessage(msg.chat.id, `"success" ${JSON.stringify(response)}`);
     })
     .catch((error) => {
-      console.log(error);
+      // console.log(error);
     });
 };

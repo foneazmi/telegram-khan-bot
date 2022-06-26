@@ -63,21 +63,41 @@ export const wallhaven = async (msg) => {
       keyboard: [pagination, ["/home"]],
     },
   });
+  // console.log({
+  //   id: msg.chat.id,
+  //   data: data.data.data,
+  //   length: data.data.data.length,
+  //   page: 0,
+  // });
   sendImageInQueue({
+    page,
     id: msg.chat.id,
     data: data.data.data,
     length: data.data.data.length,
-    page: 0,
+    index: 0,
   });
 };
 
-const sendImageInQueue = async ({ id, data, length, page }) => {
-  if (page > length) {
+const sendImageInQueue = async ({ page, id, data, length, index }) => {
+  if (index > length) {
     return 0;
   } else {
-    await bot.sendPhoto(id, data[page].ch, {
-      caption: `page ${page + 1}`,
-    });
-    return sendImageInQueue({ id, data, length, page: ++page });
+    try {
+      await bot.sendPhoto(id, data[index].thumbs.small, {
+        reply_markup: {
+          inline_keyboard: [
+            [
+              {
+                text: `Download`,
+                url: data[index].path,
+              },
+            ],
+          ],
+        },
+      });
+      return sendImageInQueue({ page, id, data, length, index: ++index });
+    } catch (error) {
+      return sendImageInQueue({ page, id, data, length, index: ++index });
+    }
   }
 };
