@@ -3,7 +3,7 @@ import {
   start,
   wallhaven,
   chatId,
-  firebase,
+  // firebase,
   stock,
   hiperdex,hiperdexCallback,
 } from "./commands";
@@ -13,7 +13,7 @@ const commandList = {
   "/home": start,
   "/wall": wallhaven,
   "/id": chatId,
-  "/fb": firebase,
+  // "/fb": firebase,
   "/hd": hiperdex,
   $: stock,
 };

@@ -2,7 +2,7 @@ import TelegramBot from "node-telegram-bot-api";
 import express from "express";
 import { command, callback } from "./command";
 import dotenv from "dotenv";
-import { fcm } from "./services/firebase";
+// import { fcm } from "./services/firebase";
 
 dotenv.config();
 
@@ -72,13 +72,13 @@ app.post("/log", (req, res) => {
   res.sendStatus(200);
 });
 
-app.post("/fcm", ({ body }, res) => {
-  fcm(body)
-    .then((response) => {
-      // console.log("response", response);
-    })
-    .catch((error) => {
-      // console.log("error", error);
-    });
-  res.sendStatus(200);
-});
+// app.post("/fcm", ({ body }, res) => {
+//   fcm(body)
+//     .then((response) => {
+//       // console.log("response", response);
+//     })
+//     .catch((error) => {
+//       // console.log("error", error);
+//     });
+//   res.sendStatus(200);
+// });
