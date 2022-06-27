@@ -4,8 +4,22 @@ export const start = (msg) => {
   let messages = "List Command";
   bot.sendMessage(msg.chat.id, messages, {
     reply_markup: {
-      resize_keyboard: true,
-      keyboard: [["/wall", "/id", "/fb"]],
+      inline_keyboard: [
+        [
+          {
+            text: `Wallpaper`,
+            callback_data: `/wall`,
+          },
+          {
+            text: `Get ID`,
+            callback_data: `/id`,
+          },
+          {
+            text: `Hiperdex`,
+            callback_data: `/hd`,
+          },
+        ],
+      ],
     },
   });
 };

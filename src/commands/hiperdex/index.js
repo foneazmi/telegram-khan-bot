@@ -11,12 +11,7 @@ export const hiperdex = async (msg) => {
   if (pages > 1) {
     pagination = [`/hd ${parseInt(pages) - 1}`, `/hd ${parseInt(pages) + 1}`];
   }
-  bot.sendMessage(msg.chat.id, `Page ${pages}`, {
-    reply_markup: {
-      resize_keyboard: true,
-      keyboard: [pagination, ["/home"]],
-    },
-  });
+  bot.sendMessage(msg.chat.id, `Page ${pages}`);
   response.list.map((e, index) => {
     let chapter = e.chapters.map((f) => ({
       text: `${f.c_title}`,
@@ -24,7 +19,6 @@ export const hiperdex = async (msg) => {
     }));
     bot.sendPhoto(msg.chat.id, e.image, {
       reply_markup: {
-        // resize_keyboard: true,
         inline_keyboard: [
           chapter,
           [

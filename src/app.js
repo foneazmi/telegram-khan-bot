@@ -1,6 +1,6 @@
 import TelegramBot from "node-telegram-bot-api";
 import express from "express";
-import { command, callback } from "./command";
+import { command } from "./command";
 import dotenv from "dotenv";
 // import { fcm } from "./services/firebase";
 
@@ -20,9 +20,10 @@ bot.on("text", (msg) => {
   command(msg);
 });
 
-bot.on("callback_query", (msg) => {
+bot.on("callback_query", async (msg) => {
   msg.message.text = msg.data;
-  callback(msg.message);
+  bot.deleteMessage(msg.message.chat.id, msg.message.message_id);
+  command(msg.message);
 });
 
 bot.on("polling_error", (error) => {

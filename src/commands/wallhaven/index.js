@@ -44,59 +44,79 @@ export const wallhaven = async (msg) => {
   let query = msg.text.split(" ").slice(1);
   let payload = queryFilter(query);
   let isPageFound = query.find((e) => e.includes("page"));
+  let page = (isPageFound && Number(isPageFound.split(":")[1])) || 1;
   var newQuery = qs
     .stringify(payload)
     .split("&")
     .filter((e) => !e.includes("page"));
-  let data = await axios.get(
-    `https://wallhaven.cc/api/v1/search?${qs.stringify(payload)}`
-  );
-  let page = (isPageFound && Number(isPageFound.split(":")[1])) || 1;
+  query = qs.stringify(payload);
+  let data = await axios.get(`https://wallhaven.cc/api/v1/search?${query}`);
+  let index = 0;
 
-  bot.sendMessage(msg.chat.id, `Wallhaven page ${page}`, {
-    reply_markup: {
-      resize_keyboard: true,
-      keyboard: [
-        [
-          `/wall page:${page ? Number(page) + 1 : 2} ${newQuery
-            .map((e) => e.replace("=", ":payload"))
-            .join(" ")}`,
-        ],
-        ["/home"],
-      ],
-    },
-  });
-  sendImageInQueue({
-    page,
-    id: msg.chat.id,
-    data: data.data.data,
-    length: data.data.data.length,
-    index: 0,
-  });
-};
-
-const sendImageInQueue = async ({ page, id, data, length, index }) => {
-  if (index > length) {
-    return 0;
-  } else {
-    try {
-      await bot.sendPhoto(id, data[index].thumbs.original, {
+  const sendImageInQueue = async ({ data }) => {
+    if (index > data.length) {
+      bot.sendMessage(msg.chat.id, `Wallhaven page ${page}`, {
         reply_markup: {
           inline_keyboard: [
             [
               {
-                text: `Download`,
-                url: data[index].path,
+                text: `Back`,
+                callback_data: `/start`,
+              },
+              {
+                text: `Next`,
+                callback_data: `/wall page:${page + 1} ${newQuery.join(" ")}`,
               },
             ],
           ],
         },
       });
-      return sendImageInQueue({ page, id, data, length, index: ++index });
-    } catch (error) {
-      return sendImageInQueue({ page, id, data, length, index: ++index });
+    } else {
+      try {
+        await bot.sendPhoto(msg.chat.id, data[index].thumbs.original, {
+          reply_markup: {
+            inline_keyboard: [
+              [
+                {
+                  text: `Open`,
+                  url: data[index].path,
+                },
+                {
+                  text: `Send`,
+                  callback_data: `wall ${data[index].path}`,
+                },
+              ],
+            ],
+          },
+        });
+        index++;
+        return sendImageInQueue({ data });
+      } catch (error) {
+        // console.log(error);
+        index++;
+        return sendImageInQueue({ data });
+      }
     }
-  }
+  };
+
+  sendImageInQueue({
+    data: data.data.data,
+  });
 };
 
-export const wallhavenCallback = async () => {};
+export const WallSendHere = async (msg) => {
+  let query = msg.text.split(" ").slice(1);
+  console.log("query", query);
+  await bot.sendPhoto(msg.chat.id, query[0], {
+    reply_markup: {
+      inline_keyboard: [
+        [
+          {
+            text: `Open`,
+            url: query[0],
+          },
+        ],
+      ],
+    },
+  });
+};
