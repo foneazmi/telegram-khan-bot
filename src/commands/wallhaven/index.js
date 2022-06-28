@@ -40,19 +40,15 @@ const queryFilter = (rawQuery) => {
   return query;
 };
 
-export const wallhaven = async (msg) => {
+const wallhaven = async (msg) => {
   let query = msg.text.split(" ").slice(1);
   let payload = queryFilter(query);
   let isPageFound = query.find((e) => e.includes("page"));
   let page = (isPageFound && Number(isPageFound.split(":")[1])) || 1;
-  var newQuery = qs
-    .stringify(payload)
-    .split("&")
-    .filter((e) => !e.includes("page"));
+  let newQuery = query.filter((e) => !e.includes("page"));
   query = qs.stringify(payload);
   let data = await axios.get(`https://wallhaven.cc/api/v1/search?${query}`);
   let index = 0;
-
   const sendImageInQueue = async ({ data }) => {
     if (index > data.length) {
       bot.sendMessage(msg.chat.id, `Wallhaven page ${page}`, {
@@ -65,7 +61,9 @@ export const wallhaven = async (msg) => {
               },
               {
                 text: `Next`,
-                callback_data: `/wall page:${page + 1} ${newQuery.join(" ")}`,
+                callback_data: `/wall page:${page + 1} ${
+                  newQuery && newQuery?.join(" ")
+                }`,
               },
             ],
           ],
@@ -83,7 +81,7 @@ export const wallhaven = async (msg) => {
                 },
                 {
                   text: `Send`,
-                  callback_data: `wall ${data[index].path}`,
+                  callback_data: `#wallSendOri ${data[index].path}`,
                 },
               ],
             ],
@@ -92,7 +90,7 @@ export const wallhaven = async (msg) => {
         index++;
         return sendImageInQueue({ data });
       } catch (error) {
-        // console.log(error);
+        console.log("error", error);
         index++;
         return sendImageInQueue({ data });
       }
@@ -104,7 +102,7 @@ export const wallhaven = async (msg) => {
   });
 };
 
-export const WallSendHere = async (msg) => {
+const WallSendOri = async (msg) => {
   let query = msg.text.split(" ").slice(1);
   console.log("query", query);
   await bot.sendPhoto(msg.chat.id, query[0], {
@@ -119,4 +117,12 @@ export const WallSendHere = async (msg) => {
       ],
     },
   });
+};
+
+export const wallCommandList = {
+  wall: () => {
+    console.log("wall");
+  },
+  "/wall": wallhaven,
+  "#wallSendOri": WallSendOri,
 };

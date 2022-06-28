@@ -1,22 +1,19 @@
 import { getFirstWord } from "./helpers";
 import {
   start,
-  wallhaven,
   chatId,
   hiperdex,
   hiperdexCallback,
-  WallSendHere,
+  wallCommandList,
 } from "./commands";
 
 const commandList = {
   "/start": start,
   "/home": start,
-  "/wall": wallhaven,
   "/id": chatId,
   "/hd": hiperdex,
-  //
-  wall: WallSendHere,
-  hd: hiperdexCallback,
+  hd: hiperdexCallback, ///
+  ...wallCommandList,
 };
 
 export const command = (msg) => {
