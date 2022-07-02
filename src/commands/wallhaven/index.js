@@ -2,39 +2,39 @@ import axios from "axios";
 import { bot } from "../../app";
 import qs from "qs";
 const queryFilter = (rawQuery) => {
-  let query = {};
+  let query = {
+    apikey: "FCJnF4ambSJaBsD9vbp7ePLiHlvNw6R8",
+    purity: "100",
+    categories: "100",
+  };
   rawQuery.map((e) => {
     let each = e.split(":");
     if (each[0] === "q") {
       query = { ...query, q: each[1] };
-    } else if (each[0] === "cat") {
+    } else if (each[0] === "categories") {
       query = { ...query, categories: each[1] };
-    } else if (each[0] === "pur") {
+    } else if (each[0] === "purity") {
       query = { ...query, purity: each[1] };
-    } else if (each[0] === "sort") {
+    } else if (each[0] === "sorting") {
       query = { ...query, sorting: each[1] };
-    } else if (each[0] === "ord") {
+    } else if (each[0] === "order") {
       query = { ...query, order: each[1] };
-    } else if (each[0] === "tr") {
+    } else if (each[0] === "topRange") {
       query = { ...query, topRange: each[1] };
-    } else if (each[0] === "al") {
+    } else if (each[0] === "atleast") {
       query = { ...query, atleast: each[1] };
-    } else if (each[0] === "res") {
+    } else if (each[0] === "resolutions") {
       query = { ...query, resolutions: each[1] };
-    } else if (each[0] === "rat") {
+    } else if (each[0] === "ratios") {
       query = { ...query, ratios: each[1] };
-    } else if (each[0] === "col") {
+    } else if (each[0] === "colors") {
       query = { ...query, colors: each[1] };
     } else if (each[0] === "page") {
       query = { ...query, page: each[1] };
     } else if (each[0] === "seed") {
       query = { ...query, seed: each[1] };
     } else if (each[0] === "nsfw") {
-      query = {
-        ...query,
-        apikey: "FCJnF4ambSJaBsD9vbp7ePLiHlvNw6R8",
-        purity: "011",
-      };
+      query = { ...query, purity: "111" };
     }
   });
   return query;
@@ -51,6 +51,10 @@ const wallhaven = async (msg) => {
   let index = 0;
   const sendImageInQueue = async ({ data }) => {
     if (index > data.length) {
+      const listCommand = [
+        { title: "General", query: "categories:100" },
+        { title: "Anime", query: "categories:010" },
+      ];
       bot.sendMessage(msg.chat.id, `Wallhaven page ${page}`, {
         reply_markup: {
           inline_keyboard: [
@@ -58,6 +62,10 @@ const wallhaven = async (msg) => {
               {
                 text: `Back`,
                 callback_data: `/start`,
+              },
+              {
+                text: `Menu`,
+                callback_data: `wallMenu`,
               },
               {
                 text: `Next`,
@@ -71,17 +79,17 @@ const wallhaven = async (msg) => {
       });
     } else {
       try {
-        await bot.sendPhoto(msg.chat.id, data[index].thumbs.original, {
+        await bot.sendPhoto(msg.chat.id, data[index]?.thumbs.original, {
           reply_markup: {
             inline_keyboard: [
               [
                 {
                   text: `Open`,
-                  url: data[index].path,
+                  url: data[index]?.path,
                 },
                 {
                   text: `Send`,
-                  callback_data: `#wallSendOri ${data[index].path}`,
+                  callback_data: `#wallSendOri ${data[index]?.path}`,
                 },
               ],
             ],
@@ -102,7 +110,7 @@ const wallhaven = async (msg) => {
   });
 };
 
-const WallSendOri = async (msg) => {
+const wallSendOri = async (msg) => {
   let query = msg.text.split(" ").slice(1);
   console.log("query", query);
   await bot.sendPhoto(msg.chat.id, query[0], {
@@ -119,10 +127,61 @@ const WallSendOri = async (msg) => {
   });
 };
 
+const wallMenu = (msg) => {
+  bot.sendMessage(msg.chat.id, "Menu", {
+    reply_markup: {
+      inline_keyboard: [
+        [
+          {
+            text: `Get Latest Wallpaper`,
+            callback_data: `/wall`,
+          },
+          {
+            text: `All`,
+            callback_data: `/wall categories:111 nsfw`,
+          },
+        ],
+        [
+          {
+            text: `General`,
+            callback_data: `/wall categories:100`,
+          },
+          {
+            text: `Anime`,
+            callback_data: `/wall categories:010`,
+          },
+          {
+            text: `People`,
+            callback_data: `/wall categories:001`,
+          },
+        ],
+        [
+          {
+            text: `Landscape`,
+            callback_data: `/wall ratios:landscape`,
+          },
+          {
+            text: `Portrait`,
+            callback_data: `/wall ratios:portrait`,
+          },
+        ],
+        [
+          {
+            text: `Desc`,
+            callback_data: `/wall order:desc`,
+          },
+          {
+            text: `Asc`,
+            callback_data: `/wall order:asc`,
+          },
+        ],
+      ],
+    },
+  });
+};
+
 export const wallCommandList = {
-  wall: () => {
-    console.log("wall");
-  },
+  wallMenu,
   "/wall": wallhaven,
-  "#wallSendOri": WallSendOri,
+  "#wallSendOri": wallSendOri,
 };

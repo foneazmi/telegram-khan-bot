@@ -8,7 +8,7 @@ export const start = (msg) => {
         [
           {
             text: `Wallpaper`,
-            callback_data: `/wall`,
+            callback_data: `wallMenu`,
           },
           {
             text: `Get ID`,
