@@ -112,19 +112,34 @@ const wallhaven = async (msg) => {
 
 const wallSendOri = async (msg) => {
   let query = msg.text.split(" ").slice(1);
-  console.log("query", query);
-  await bot.sendPhoto(msg.chat.id, query[0], {
-    reply_markup: {
-      inline_keyboard: [
-        [
-          {
-            text: `Open`,
-            url: query[0],
-          },
+  console.log("queryKhan", query);
+  try {
+    await bot.sendPhoto(msg.chat.id, query[0], {
+      reply_markup: {
+        inline_keyboard: [
+          [
+            {
+              text: `Open`,
+              url: query[0],
+            },
+          ],
         ],
-      ],
-    },
-  });
+      },
+    });
+  } catch (error) {
+    await bot.sendMessage(msg.chat.id, "Failed to send image", {
+      reply_markup: {
+        inline_keyboard: [
+          [
+            {
+              text: `Open`,
+              url: query[0],
+            },
+          ],
+        ],
+      },
+    });
+  }
 };
 
 const wallMenu = (msg) => {
