@@ -55,28 +55,32 @@ const wallhaven = async (msg) => {
         { title: "General", query: "categories:100" },
         { title: "Anime", query: "categories:010" },
       ];
-      bot.sendMessage(msg.chat.id, `Wallhaven page ${page}`, {
-        reply_markup: {
-          inline_keyboard: [
-            [
-              {
-                text: `Back`,
-                callback_data: `/start`,
-              },
-              {
-                text: `Menu`,
-                callback_data: `wallMenu`,
-              },
-              {
-                text: `Next`,
-                callback_data: `/wall page:${page + 1} ${
-                  newQuery && newQuery?.join(" ")
-                }`,
-              },
+      bot.sendMessage(
+        msg.chat.id,
+        `/wall page:${page + 1} ${newQuery && newQuery?.join(" ")}`,
+        {
+          reply_markup: {
+            inline_keyboard: [
+              [
+                {
+                  text: `Back`,
+                  callback_data: `/start`,
+                },
+                {
+                  text: `Menu`,
+                  callback_data: `wallMenu`,
+                },
+                {
+                  text: `Next`,
+                  callback_data: `/wall page:${page + 1} ${
+                    newQuery && newQuery?.join(" ")
+                  }`,
+                },
+              ],
             ],
-          ],
-        },
-      });
+          },
+        }
+      );
     } else {
       try {
         await bot.sendPhoto(msg.chat.id, data[index]?.thumbs.original, {
